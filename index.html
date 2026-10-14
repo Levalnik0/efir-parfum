@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ЭФИР — нишевый парфюмерный дом</title>
+<meta name="description" content="ЭФИР — один флакон, три варианта аромата. 3D-витрина, которую можно вращать и приближать прямо в браузере.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%230b0a0d%22/></svg>">
+</head>
+<body>
+
+<div class="cursor" id="cursor"><span class="cursor__label"></span></div>
+
+<div class="preloader" id="preloader">
+  <div class="preloader__mark">ЭФИР</div>
+  <div class="preloader__bar"><span id="preloaderFill"></span></div>
+</div>
+
+<header class="header" id="header">
+  <div class="header__inner">
+    <a href="#top" class="header__logo">ЭФИР</a>
+    <nav class="header__nav">
+      <a href="#lab" data-cursor-hover>Флакон</a>
+      <a href="#notes" data-cursor-hover>Ноты</a>
+      <a href="#variants" data-cursor-hover>Варианты</a>
+      <a href="#about" data-cursor-hover>О бренде</a>
+    </nav>
+    <a href="#cta" class="header__cta btn-magnetic" data-cursor-hover>Где купить</a>
+    <button class="header__burger" id="burger" aria-label="Открыть меню" aria-expanded="false">
+      <span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<nav class="mobile-nav" id="mobileNav">
+  <a href="#lab">Флакон</a>
+  <a href="#notes">Ноты</a>
+  <a href="#variants">Варианты</a>
+  <a href="#about">О бренде</a>
+  <a href="#cta">Где купить</a>
+</nav>
+
+<main id="top">
+
+  <section class="hero" id="hero">
+    <div class="hero__inner">
+      <p class="hero__eyebrow reveal-line"><span>Нишевый парфюмерный дом · Один флакон</span></p>
+      <h1 class="hero__title reveal-up">Воздух, принявший форму</h1>
+      <p class="hero__desc reveal-up">Один флакон, три состояния одного и того же воздуха — Янтарь, Сумрак и Соль живут в одной форме, но дышат по-разному.</p>
+      <a href="#lab" class="hero__link btn-magnetic" data-cursor-hover><span>Рассмотреть флакон</span><i>→</i></a>
+    </div>
+    <div class="hero__scroll-hint reveal-up"><span>Листайте вниз</span></div>
+  </section>
+
+  <section class="lab" id="lab">
+    <div class="lab__sticky">
+      <div class="lab__canvas-wrap">
+        <canvas id="bottleCanvas"></canvas>
+      </div>
+      <div class="lab__states">
+        <div class="lab__state is-active" data-state="0">
+          <p>Форма, в которую налили тишину.</p>
+        </div>
+        <div class="lab__state" data-state="1">
+          <p>Крышка отлита вручную, на стыке стекла и металла. Каждый виток повторяет движение руки, которая её сделала.</p>
+        </div>
+        <div class="lab__state" data-state="2">
+          <p>На дне — то, что держит аромат дольше слов. Смолы и мускус работают тихо, без доказательств.</p>
+        </div>
+      </div>
+      <p class="lab__hint">Потяните — пусть флакон обернётся к свету.</p>
+    </div>
+  </section>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__track">
+      <span>ОДИН ФЛАКОН</span><span>·</span><span>ТРИ СОСТОЯНИЯ ВОЗДУХА</span><span>·</span><span>НЕВИДИМОЕ, У КОТОРОГО ЕСТЬ ФОРМА</span><span>·</span><span>ЭФИР НЕ КРИЧИТ — ОН ОСТАЁТСЯ</span><span>·</span><span>ПАРФЮМЕРИЯ БЕЗ ЛИШНИХ СЛОВ</span><span>·</span>
+      <span>ОДИН ФЛАКОН</span><span>·</span><span>ТРИ СОСТОЯНИЯ ВОЗДУХА</span><span>·</span><span>НЕВИДИМОЕ, У КОТОРОГО ЕСТЬ ФОРМА</span><span>·</span><span>ЭФИР НЕ КРИЧИТ — ОН ОСТАЁТСЯ</span><span>·</span><span>ПАРФЮМЕРИЯ БЕЗ ЛИШНИХ СЛОВ</span><span>·</span>
+    </div>
+  </div>
+
+  <section class="notes" id="notes">
+    <div class="notes__head">
+      <p class="eyebrow">Ноты</p>
+      <h2 class="reveal-up">Из чего состоит эфир</h2>
+    </div>
+    <div class="notes__grid">
+      <div class="notes__col reveal-up">
+        <p class="notes__title">Верхние ноты</p>
+        <ul class="notes__list">
+          <li class="notes__item"><b>Бергамот</b><span>холодная цитрусовая вспышка</span></li>
+          <li class="notes__item"><b>Кардамон</b><span>пряная искра на вдохе</span></li>
+          <li class="notes__item"><b>Лист инжира</b><span>зелёная тень на свету</span></li>
+        </ul>
+      </div>
+      <div class="notes__col reveal-up">
+        <p class="notes__title">Средние ноты</p>
+        <ul class="notes__list">
+          <li class="notes__item"><b>Роза</b><span>сухой, несладкий лепесток</span></li>
+          <li class="notes__item"><b>Шафран</b><span>тёплая пыль в воздухе</span></li>
+          <li class="notes__item"><b>Ладан</b><span>дымная нить через комнату</span></li>
+        </ul>
+      </div>
+      <div class="notes__col reveal-up">
+        <p class="notes__title">Базовые ноты</p>
+        <ul class="notes__list">
+          <li class="notes__item"><b>Амбра</b><span>тепло, оставшееся на коже</span></li>
+          <li class="notes__item"><b>Ветивер</b><span>сырая земля после дождя</span></li>
+          <li class="notes__item"><b>Мускус</b><span>сигнал, различимый только вблизи</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="ratings" id="ratings">
+    <div class="ratings__head">
+      <p class="eyebrow">Характеристики</p>
+      <h2 class="reveal-up">Как это ощущается</h2>
+    </div>
+    <div class="ratings__list">
+      <div class="rating__item reveal-up">
+        <div class="rating__top">
+          <span class="rating__label">Интенсивность</span>
+          <span class="rating__value" data-count="62">0</span>
+        </div>
+        <div class="rating__bar"><div class="rating__bar-fill" data-fraction="0.62"></div></div>
+        <p class="rating__desc">Раскрывается не сразу, но держит внимание до конца.</p>
+      </div>
+      <div class="rating__item reveal-up">
+        <div class="rating__top">
+          <span class="rating__label">Стойкость</span>
+          <span class="rating__value" data-count="54">0</span>
+        </div>
+        <div class="rating__bar"><div class="rating__bar-fill" data-fraction="0.54"></div></div>
+        <p class="rating__desc">Живёт на коже весь день, не повторяя себя дважды.</p>
+      </div>
+      <div class="rating__item reveal-up">
+        <div class="rating__top">
+          <span class="rating__label">Шлейф</span>
+          <span class="rating__value" data-count="81">0</span>
+        </div>
+        <div class="rating__bar"><div class="rating__bar-fill" data-fraction="0.81"></div></div>
+        <p class="rating__desc">Чувствуется в комнате ещё долго после того, как вы вышли.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="variants" id="variants">
+    <div class="variants__head">
+      <p class="eyebrow">Варианты</p>
+      <h2 class="reveal-up">Один флакон, три настроения</h2>
+    </div>
+    <div class="variants__grid">
+      <button class="variant reveal-up" data-variant="amber" data-cursor-hover>
+        <span class="variant__swatch" style="--variant-color:#d98a3d"></span>
+        <span class="variant__name">Янтарь</span>
+        <span class="variant__desc">Тепло, которое не остывает. Смола, тёплые специи и кожа под слоем позднего света — для тех, кто носит осень под одеждой.</span>
+        <span class="variant__price">9 400 ₽</span>
+      </button>
+      <button class="variant reveal-up" data-variant="dusk" data-cursor-hover>
+        <span class="variant__swatch" style="--variant-color:#6a5acd"></span>
+        <span class="variant__name">Сумрак</span>
+        <span class="variant__desc">Вечер, в котором больше тени, чем света. Тёмные пряности, дым и мёд на излёте дня — аромат для комнат без верхнего освещения.</span>
+        <span class="variant__price">12 600 ₽</span>
+      </button>
+      <button class="variant reveal-up" data-variant="salt" data-cursor-hover>
+        <span class="variant__swatch" style="--variant-color:#d8d2c0"></span>
+        <span class="variant__name">Соль</span>
+        <span class="variant__desc">Холодный воздух после прилива. Минералы, белый мускус и лёгкий ветер на коже — для тех, кому хватает немногого.</span>
+        <span class="variant__price">10 800 ₽</span>
+      </button>
+    </div>
+  </section>
+
+  <section class="about" id="about">
+    <div class="about__media">
+      <div class="about__img" aria-hidden="true"></div>
+    </div>
+    <div class="about__text">
+      <p class="eyebrow">О бренде</p>
+      <h2 class="reveal-up">ЭФИР начался с отказа</h2>
+      <p class="about__p reveal-up">Мы могли сделать линейку из двенадцати ароматов — вместо этого сделали один флакон и три его состояния. Не потому что идей было мало, а потому что лишний флакон на полке — это ещё один компромисс.</p>
+      <p class="about__p reveal-up">Один сосуд проще довести до предела: форма, которую можно крутить в руках не уставая, стекло, в котором жидкость выглядит честно, крышка, у которой нет декоративной функции — только вес и точность. Три варианта внутри неё — это не деление на «день» и «ночь», а три разных ответа на один и тот же вопрос: каким воздухом вы хотите быть сегодня.</p>
+      <p class="about__p reveal-up">Мы не говорим про избранность — только про внимание к деталям, которые обычно не замечают. ЭФИР не занимает много места. Он просто остаётся дольше, чем вы думаете.</p>
+    </div>
+  </section>
+
+  <section class="cta" id="cta">
+    <div class="cta__inner">
+      <p class="eyebrow">Запуск</p>
+      <h2 class="reveal-up">Узнать о запуске</h2>
+      <p class="cta__sub reveal-up">Оставьте почту — напишем, когда флакон станет доступен к заказу, и ничего больше.</p>
+      <form class="cta__form" id="ctaForm" novalidate>
+        <div class="field">
+          <input type="email" id="c-email" name="email" required placeholder=" ">
+          <label for="c-email">Электронная почта</label>
+          <span class="field__error">Введите корректный e-mail</span>
+        </div>
+        <button type="submit" class="cta__submit btn-magnetic" data-cursor-hover>Сообщить мне</button>
+      </form>
+      <div class="cta__success" id="ctaSuccess">
+        <p>Готово — напишем, как только откроется предзаказ.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="footer__marquee" aria-hidden="true">
+    <div class="footer__marquee-track"><span>ЭФИР</span><span>ЭФИР</span><span>ЭФИР</span><span>ЭФИР</span></div>
+  </div>
+  <div class="footer__grid">
+    <div>
+      <p class="eyebrow">Шоурум</p>
+      <p>Показ флакона — по записи</p>
+      <p>Вт–Сб, 12:00–20:00</p>
+    </div>
+    <div>
+      <p class="eyebrow">Контакты</p>
+      <p><a href="mailto:info@efir-parfum.ru" data-cursor-hover>info@efir-parfum.ru</a></p>
+      <p><a href="tel:+79000000000" data-cursor-hover>+7 (900) 000-00-00</a></p>
+      <p>Москва, шоурум по записи</p>
+    </div>
+    <div>
+      <p class="eyebrow">Соцсети</p>
+      <p><a href="#" data-cursor-hover>Telegram</a></p>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <span>© 2026 ЭФИР. Все права защищены.</span>
+    <span>3D-модель: «Perfume bottle» — Poly by Google, CC BY 4.0</span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module" src="bottle-scene.js"></script>
+<script src="script.js" defer></script>
+</body>
+</html>
