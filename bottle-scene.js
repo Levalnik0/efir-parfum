@@ -153,22 +153,6 @@ window.initBottleScene = function initBottleScene(canvasEl) {
 
   let loadedRoot = null;
 
-  // the liquid mesh (identified below by its known node name in this GLB)
-  // stays a perfectly rigid part of the glass — rotating it on its own
-  // tore its silhouette away from the glass walls at any real tilt angle.
-  // Instead its surface is kept level by a world-space clipping plane: the
-  // mesh's sides still match the (rotating) glass exactly, only the top
-  // face is cut flat at a fixed world height, the way a real liquid's
-  // surface would look as the bottle tilts around it.
-  const LIQUID_MESH_NAME = 'Mesh4__Color_A05_1_0';
-  // the outer glass shell — it doesn't reach the very base of the bottle
-  // (the liquid/inner-glass meshes stop short, leaving a solid decorative
-  // glass foot), so its own near-invisible 5% opacity made that foot read
-  // as an empty gap rather than thick glass.
-  const OUTER_GLASS_MESH_NAME = 'Mesh5_Color_A01_0';
-  renderer.localClippingEnabled = true;
-  const liquidClipPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), 0);
-
   const loader = new GLTFLoader();
   loader.load(MODEL_URL, (gltf) => {
     const model = gltf.scene;
@@ -189,34 +173,10 @@ window.initBottleScene = function initBottleScene(canvasEl) {
       if (!child.isMesh) return;
       child.castShadow = renderer.shadowMap.enabled;
       child.receiveShadow = false;
-      if (child.name === LIQUID_MESH_NAME && child.material) {
-        // the spec-gloss → metal-rough conversion left the liquid at ~7%
-        // opacity — barely a tint. Give it real colour density so it reads
-        // as an actual liquid instead of washing out at glancing angles.
-        child.material.opacity = 0.55;
-        child.material.side = THREE.DoubleSide; // so the cut face isn't a hole
-        child.material.clippingPlanes = [liquidClipPlane];
-      }
-      if (child.name === OUTER_GLASS_MESH_NAME && child.material) {
-        // tinting the glass itself (not just bumping opacity) means the
-        // solid base reads as rose-tinted glass continuing the liquid's
-        // colour, instead of a neutral-grey band butting up against it.
-        child.material.color.set(0xeec2cd);
-        child.material.opacity = 0.16;
-      }
     });
 
     bottleGroup.add(model);
     loadedRoot = model;
-
-    const liquid = model.getObjectByName(LIQUID_MESH_NAME);
-    if (liquid) {
-      // fix the clip height at the liquid's own resting fill line, in world
-      // space, once — a liquid's level never needs to move on its own, only
-      // the (rotating) glass around it does.
-      const liquidBox = new THREE.Box3().setFromObject(liquid);
-      liquidClipPlane.constant = liquidBox.max.y;
-    }
   }, undefined, (err) => {
     console.warn('ЭФИР: не удалось загрузить 3D-модель флакона', err);
   });
