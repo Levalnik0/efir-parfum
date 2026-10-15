@@ -1,23 +1,17 @@
 /*
- * ЭФИР — интерактивная 3D-сцена флакона (Three.js r160, ES-модуль).
- * Загружает готовую 3D-модель (assets/models/perfume-bottle.glb, CC-BY,
- * "Perfume bottle" by Poly by Google, via poly.pizza) и одевает её в
- * стеклянный материал. Подключается как <script type="module" src="bottle-scene.js">.
+ * ЭФИР — интерактивная 3D-сцена флакона «ВУАЛЬ» (Three.js r160, ES-модуль).
+ * Загружает настоящую 3D-модель (assets/models/perfume-bottle-real.glb,
+ * CC-BY, «Perfume Bottle» — Michaela Blanchfield, Sketchfab) и показывает
+ * её родные материалы (розовое рифлёное стекло + золотая крышка) без
+ * подмены цвета. Подключается как <script type="module" src="bottle-scene.js">.
  *
- * Публичный API (без изменений):
- *   window.initBottleScene(canvasEl) -> { setVariant(name), setScrollProgress(p), destroy() } | null
+ * Публичный API:
+ *   window.initBottleScene(canvasEl) -> { setScrollProgress(p), destroy() } | null
  */
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-const VARIANT_COLORS = {
-  amber: 0xd98a3d,
-  dusk: 0x6a5acd,
-  salt: 0xd8d2c0
-};
-
-const GOLD = 0xc9a24b;
-const MODEL_URL = 'assets/models/perfume-bottle.glb';
+const MODEL_URL = 'assets/models/perfume-bottle-real.glb';
 const MODEL_HEIGHT = 2.15;
 // Where the (re-centered) model's own origin sits in world space, and the
 // floor's Y derived from it so the model's base always rests on the floor
@@ -118,9 +112,9 @@ window.initBottleScene = function initBottleScene(canvasEl) {
 
   renderer.setSize(size.w, size.h, false);
 
-  // ---------- lighting ----------
-  const ambient = new THREE.AmbientLight(0xfff2de, 0.6);
-  const key = new THREE.DirectionalLight(0xfff6e8, 1.9);
+  // ---------- lighting: soft studio set-up for a delicate product shot ----------
+  const ambient = new THREE.AmbientLight(0xfff2de, 0.65);
+  const key = new THREE.DirectionalLight(0xfff6e8, 1.75);
   key.position.set(2.4, 3.2, 3.6);
   key.castShadow = renderer.shadowMap.enabled;
   if (key.castShadow) {
@@ -129,7 +123,7 @@ window.initBottleScene = function initBottleScene(canvasEl) {
     key.shadow.camera.far = 12;
     key.shadow.bias = -0.0015;
   }
-  const rim = new THREE.DirectionalLight(0x9fb4ff, 1.0);
+  const rim = new THREE.DirectionalLight(0xf3c9d4, 0.9);
   rim.position.set(-3.2, 1.6, -2.4);
   const fill = new THREE.DirectionalLight(0xffe9c7, 0.5);
   fill.position.set(-1.5, -0.5, 2.8);
@@ -138,7 +132,7 @@ window.initBottleScene = function initBottleScene(canvasEl) {
   // ---------- floor ----------
   const floorGeo = new THREE.CircleGeometry(4.2, lowEnd ? 24 : 48);
   const floorMat = new THREE.MeshStandardMaterial({
-    color: 0x08070a, roughness: 0.35, metalness: 0.2, transparent: true, opacity: 0.55
+    color: 0xf1ded2, roughness: 0.4, metalness: 0.05, transparent: true, opacity: 0.6
   });
   const floor = new THREE.Mesh(floorGeo, floorMat);
   floor.rotation.x = -Math.PI / 2;
@@ -157,9 +151,7 @@ window.initBottleScene = function initBottleScene(canvasEl) {
   bottleGroup.position.y = GROUP_Y_OFFSET;
   pivotGroup.add(bottleGroup);
 
-  let tintMeshes = [];
   let loadedRoot = null;
-  let pendingVariant = 'amber';
 
   const loader = new GLTFLoader();
   loader.load(MODEL_URL, (gltf) => {
@@ -170,76 +162,24 @@ window.initBottleScene = function initBottleScene(canvasEl) {
     box.getSize(size3);
     const center = new THREE.Vector3();
     box.getCenter(center);
-    model.position.sub(center);
-
     const scale = size3.y > 0.0001 ? MODEL_HEIGHT / size3.y : 1;
     model.scale.setScalar(scale);
+    // position is applied in the parent's (already-scaled) space, so the
+    // recentring offset must be scaled too — otherwise models far from unit
+    // scale (this one is ~0.1 units tall) end up barely recentred at all.
+    model.position.set(-center.x * scale, -center.y * scale, -center.z * scale);
 
-    const parts = [];
     model.traverse((child) => {
       if (!child.isMesh) return;
       child.castShadow = renderer.shadowMap.enabled;
       child.receiveShadow = false;
-      // Some low-poly source meshes ship with flat/incorrect normals that
-      // cause stray bright facets under a physical material — recompute
-      // smooth normals from the actual triangle winding instead.
-      child.geometry.computeVertexNormals();
-      const physMat = new THREE.MeshPhysicalMaterial({
-        color: new THREE.Color(0xf4f1ea),
-        transmission: 0.88,
-        roughness: 0.1,
-        thickness: 0.45,
-        ior: 1.45,
-        clearcoat: 0.5,
-        clearcoatRoughness: 0.18,
-        transparent: true
-      });
-      child.material = physMat;
-
-      const childBox = new THREE.Box3().setFromObject(child);
-      const childCenter = new THREE.Vector3();
-      childBox.getCenter(childCenter);
-      parts.push({ mesh: child, centerY: childCenter.y });
     });
-
-    // The main glass/liquid body sits lowest (caps, sprayer bulbs and
-    // fittings sit above it on these bottle models) — pick that one for the
-    // glass treatment and leave the rest as metal/gold hardware.
-    parts.sort((a, b) => a.centerY - b.centerY);
-    if (parts.length) {
-      tintMeshes = [parts[0].mesh];
-      for (let i = 1; i < parts.length; i++) {
-        parts[i].mesh.material = new THREE.MeshStandardMaterial({ color: GOLD, roughness: 0.6, metalness: 0.4 });
-      }
-    }
 
     bottleGroup.add(model);
     loadedRoot = model;
-    applyVariant(pendingVariant);
   }, undefined, (err) => {
     console.warn('ЭФИР: не удалось загрузить 3D-модель флакона', err);
   });
-
-  // ---------- variant color transition ----------
-  let activeGsapTween = null;
-  let fallbackColorTarget = null;
-
-  function applyVariant(name) {
-    pendingVariant = name;
-    const hex = VARIANT_COLORS[name];
-    if (hex === undefined || !tintMeshes.length) return;
-    const target = new THREE.Color(hex);
-    if (window.gsap) {
-      if (activeGsapTween) activeGsapTween.kill();
-      fallbackColorTarget = null;
-      const colors = tintMeshes.map((m) => m.material.color);
-      activeGsapTween = window.gsap.to(colors, {
-        r: target.r, g: target.g, b: target.b, duration: 1.1, ease: 'power2.out'
-      });
-    } else {
-      fallbackColorTarget = target;
-    }
-  }
 
   // ---------- pointer drag-to-rotate (+ inertia) ----------
   let isDragging = false;
@@ -334,18 +274,6 @@ window.initBottleScene = function initBottleScene(canvasEl) {
       pivotGroup.rotation.y += AUTO_ROTATE_SPEED * delta;
     }
 
-    if (fallbackColorTarget && tintMeshes.length) {
-      let allDone = true;
-      tintMeshes.forEach((m) => {
-        m.material.color.lerp(fallbackColorTarget, 0.045);
-        if (Math.abs(m.material.color.r - fallbackColorTarget.r) > 0.003) allDone = false;
-      });
-      if (allDone) {
-        tintMeshes.forEach((m) => m.material.color.copy(fallbackColorTarget));
-        fallbackColorTarget = null;
-      }
-    }
-
     camera.position.lerp(scrollTarget.pos, 0.06);
     currentLook.lerp(scrollTarget.look, 0.06);
     camera.fov = lerp(camera.fov, scrollTarget.fov, 0.06);
@@ -373,8 +301,6 @@ window.initBottleScene = function initBottleScene(canvasEl) {
       else if (reduceMotionQuery.removeListener) reduceMotionQuery.removeListener(onReduceMotionChange);
     }
 
-    if (activeGsapTween) activeGsapTween.kill();
-
     if (loadedRoot) {
       loadedRoot.traverse((child) => {
         if (child.isMesh) {
@@ -389,7 +315,6 @@ window.initBottleScene = function initBottleScene(canvasEl) {
   }
 
   return {
-    setVariant: applyVariant,
     setScrollProgress,
     destroy
   };

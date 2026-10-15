@@ -3,22 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ЭФИР — нишевый парфюмерный дом</title>
-<meta name="description" content="ЭФИР — один флакон, три варианта аромата. 3D-витрина, которую можно вращать и приближать прямо в браузере.">
+<title>ЭФИР — ВУАЛЬ, новый аромат</title>
+<meta name="description" content="ВУАЛЬ — новый аромат ЭФИР. Роза без тяжести, в стекле, собранном в мягкие складки. 3D-витрина флакона прямо в браузере.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Yeseva+One&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="styles.css">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%230b0a0d%22/></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23f9efe8%22/></svg>">
 </head>
 <body>
 
 <div class="cursor" id="cursor"><span class="cursor__label"></span></div>
 
 <div class="preloader" id="preloader">
-  <div class="preloader__mark">ЭФИР</div>
+  <div class="preloader__mark">ВУАЛЬ</div>
   <div class="preloader__bar"><span id="preloaderFill"></span></div>
 </div>
 
@@ -28,10 +28,10 @@
     <nav class="header__nav">
       <a href="#lab" data-cursor-hover>Флакон</a>
       <a href="#notes" data-cursor-hover>Ноты</a>
-      <a href="#variants" data-cursor-hover>Варианты</a>
+      <a href="#ritual" data-cursor-hover>Ритуал</a>
       <a href="#about" data-cursor-hover>О бренде</a>
     </nav>
-    <a href="#cta" class="header__cta btn-magnetic" data-cursor-hover>Где купить</a>
+    <a href="#cta" class="header__cta btn-magnetic" data-cursor-hover>Предзаказ</a>
     <button class="header__burger" id="burger" aria-label="Открыть меню" aria-expanded="false">
       <span></span><span></span>
     </button>
@@ -41,18 +41,23 @@
 <nav class="mobile-nav" id="mobileNav">
   <a href="#lab">Флакон</a>
   <a href="#notes">Ноты</a>
-  <a href="#variants">Варианты</a>
+  <a href="#ritual">Ритуал</a>
   <a href="#about">О бренде</a>
-  <a href="#cta">Где купить</a>
+  <a href="#cta">Предзаказ</a>
 </nav>
 
 <main id="top">
 
   <section class="hero" id="hero">
+    <div class="hero__petals" aria-hidden="true">
+      <span class="petal petal--1"></span>
+      <span class="petal petal--2"></span>
+      <span class="petal petal--3"></span>
+    </div>
     <div class="hero__inner">
-      <p class="hero__eyebrow reveal-line"><span>Нишевый парфюмерный дом · Один флакон</span></p>
-      <h1 class="hero__title reveal-up">Воздух, принявший форму</h1>
-      <p class="hero__desc reveal-up">Один флакон, три состояния одного и того же воздуха — Янтарь, Сумрак и Соль живут в одной форме, но дышат по-разному.</p>
+      <p class="hero__eyebrow reveal-line"><span>ЭФИР представляет</span></p>
+      <h1 class="hero__title reveal-up">ВУАЛЬ</h1>
+      <p class="hero__desc reveal-up">Роза в самой тихой из возможных форм — лёгкая, как вторая кожа, и нежная, как не договорённая до конца фраза.</p>
       <a href="#lab" class="hero__link btn-magnetic" data-cursor-hover><span>Рассмотреть флакон</span><i>→</i></a>
     </div>
     <div class="hero__scroll-hint reveal-up"><span>Листайте вниз</span></div>
@@ -65,54 +70,55 @@
       </div>
       <div class="lab__states">
         <div class="lab__state is-active" data-state="0">
-          <p>Форма, в которую налили тишину.</p>
+          <p>Стекло собрано в мягкие складки — будто ткань, а не твёрдый материал.</p>
         </div>
         <div class="lab__state" data-state="1">
-          <p>Крышка отлита вручную, на стыке стекла и металла. Каждый виток повторяет движение руки, которая её сделала.</p>
+          <p>Крышка цвета старого золота. Один чёткий акцент после волны стекла.</p>
         </div>
         <div class="lab__state" data-state="2">
-          <p>На дне — то, что держит аромат дольше слов. Смолы и мускус работают тихо, без доказательств.</p>
+          <p>Внутри — роза без сладости и тёплый шлейф мускуса, который держится дольше, чем вы ждёте.</p>
         </div>
       </div>
       <p class="lab__hint">Потяните — пусть флакон обернётся к свету.</p>
     </div>
   </section>
 
-  <div class="marquee" aria-hidden="true">
-    <div class="marquee__track">
-      <span>ОДИН ФЛАКОН</span><span>·</span><span>ТРИ СОСТОЯНИЯ ВОЗДУХА</span><span>·</span><span>НЕВИДИМОЕ, У КОТОРОГО ЕСТЬ ФОРМА</span><span>·</span><span>ЭФИР НЕ КРИЧИТ — ОН ОСТАЁТСЯ</span><span>·</span><span>ПАРФЮМЕРИЯ БЕЗ ЛИШНИХ СЛОВ</span><span>·</span>
-      <span>ОДИН ФЛАКОН</span><span>·</span><span>ТРИ СОСТОЯНИЯ ВОЗДУХА</span><span>·</span><span>НЕВИДИМОЕ, У КОТОРОГО ЕСТЬ ФОРМА</span><span>·</span><span>ЭФИР НЕ КРИЧИТ — ОН ОСТАЁТСЯ</span><span>·</span><span>ПАРФЮМЕРИЯ БЕЗ ЛИШНИХ СЛОВ</span><span>·</span>
-    </div>
+  <div class="scent-trail" aria-hidden="true">
+    <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+      <path class="scent-trail__path" d="M0,30 C150,0 250,60 400,30 C550,0 650,60 800,30 C950,0 1050,60 1200,30" />
+    </svg>
+    <span class="scent-trail__dot"></span>
+    <p class="scent-trail__text">Нежность — это точность</p>
   </div>
 
   <section class="notes" id="notes">
     <div class="notes__head">
       <p class="eyebrow">Ноты</p>
-      <h2 class="reveal-up">Из чего состоит эфир</h2>
+      <h2 class="reveal-up">Из чего собрана вуаль</h2>
     </div>
     <div class="notes__grid">
       <div class="notes__col reveal-up">
         <p class="notes__title">Верхние ноты</p>
         <ul class="notes__list">
-          <li class="notes__item"><b>Бергамот</b><span>холодная цитрусовая вспышка</span></li>
-          <li class="notes__item"><b>Кардамон</b><span>пряная искра на вдохе</span></li>
-          <li class="notes__item"><b>Лист инжира</b><span>зелёная тень на свету</span></li>
+          <li class="notes__item"><b>Розовый перец</b><span>тёплая искра на вдохе</span></li>
+          <li class="notes__item"><b>Личи</b><span>сочный, едва уловимый штрих</span></li>
+          <li class="notes__item"><b>Бергамот</b><span>лёгкая прохлада сверху</span></li>
         </ul>
       </div>
       <div class="notes__col reveal-up">
         <p class="notes__title">Средние ноты</p>
         <ul class="notes__list">
-          <li class="notes__item"><b>Роза</b><span>сухой, несладкий лепесток</span></li>
-          <li class="notes__item"><b>Шафран</b><span>тёплая пыль в воздухе</span></li>
-          <li class="notes__item"><b>Ладан</b><span>дымная нить через комнату</span></li>
+          <li class="notes__item"><b>Роза</b><span>сухой, несладкий лепесток — сердце аромата</span></li>
+          <li class="notes__item"><b>Пион</b><span>воздушная вспышка белого</span></li>
+          <li class="notes__item"><b>Фиалка</b><span>пудровая тишина</span></li>
         </ul>
       </div>
       <div class="notes__col reveal-up">
         <p class="notes__title">Базовые ноты</p>
         <ul class="notes__list">
-          <li class="notes__item"><b>Амбра</b><span>тепло, оставшееся на коже</span></li>
-          <li class="notes__item"><b>Ветивер</b><span>сырая земля после дождя</span></li>
-          <li class="notes__item"><b>Мускус</b><span>сигнал, различимый только вблизи</span></li>
+          <li class="notes__item"><b>Белый мускус</b><span>тепло, едва ощутимое</span></li>
+          <li class="notes__item"><b>Кашемировое дерево</b><span>мягкость без веса</span></li>
+          <li class="notes__item"><b>Амбра</b><span>долгий, тихий шлейф</span></li>
         </ul>
       </div>
     </div>
@@ -127,54 +133,50 @@
       <div class="rating__item reveal-up">
         <div class="rating__top">
           <span class="rating__label">Интенсивность</span>
-          <span class="rating__value" data-count="62">0</span>
+          <span class="rating__value" data-count="38">0</span>
         </div>
-        <div class="rating__bar"><div class="rating__bar-fill" data-fraction="0.62"></div></div>
-        <p class="rating__desc">Раскрывается не сразу, но держит внимание до конца.</p>
+        <div class="rating__bar"><div class="rating__bar-fill" data-fraction="0.38"></div></div>
+        <p class="rating__desc">Раскрывается тихо, почти неслышно — и в этом вся суть.</p>
       </div>
       <div class="rating__item reveal-up">
         <div class="rating__top">
           <span class="rating__label">Стойкость</span>
-          <span class="rating__value" data-count="54">0</span>
+          <span class="rating__value" data-count="58">0</span>
         </div>
-        <div class="rating__bar"><div class="rating__bar-fill" data-fraction="0.54"></div></div>
-        <p class="rating__desc">Живёт на коже весь день, не повторяя себя дважды.</p>
+        <div class="rating__bar"><div class="rating__bar-fill" data-fraction="0.58"></div></div>
+        <p class="rating__desc">Держится на коже весь день, не повторяя себя дважды.</p>
       </div>
       <div class="rating__item reveal-up">
         <div class="rating__top">
           <span class="rating__label">Шлейф</span>
-          <span class="rating__value" data-count="81">0</span>
+          <span class="rating__value" data-count="45">0</span>
         </div>
-        <div class="rating__bar"><div class="rating__bar-fill" data-fraction="0.81"></div></div>
-        <p class="rating__desc">Чувствуется в комнате ещё долго после того, как вы вышли.</p>
+        <div class="rating__bar"><div class="rating__bar-fill" data-fraction="0.45"></div></div>
+        <p class="rating__desc">Чувствуется рядом, но никогда не кричит.</p>
       </div>
     </div>
   </section>
 
-  <section class="variants" id="variants">
-    <div class="variants__head">
-      <p class="eyebrow">Варианты</p>
-      <h2 class="reveal-up">Один флакон, три настроения</h2>
-    </div>
-    <div class="variants__grid">
-      <button class="variant reveal-up" data-variant="amber" data-cursor-hover>
-        <span class="variant__swatch" style="--variant-color:#d98a3d"></span>
-        <span class="variant__name">Янтарь</span>
-        <span class="variant__desc">Тепло, которое не остывает. Смола, тёплые специи и кожа под слоем позднего света — для тех, кто носит осень под одеждой.</span>
-        <span class="variant__price">9 400 ₽</span>
-      </button>
-      <button class="variant reveal-up" data-variant="dusk" data-cursor-hover>
-        <span class="variant__swatch" style="--variant-color:#6a5acd"></span>
-        <span class="variant__name">Сумрак</span>
-        <span class="variant__desc">Вечер, в котором больше тени, чем света. Тёмные пряности, дым и мёд на излёте дня — аромат для комнат без верхнего освещения.</span>
-        <span class="variant__price">12 600 ₽</span>
-      </button>
-      <button class="variant reveal-up" data-variant="salt" data-cursor-hover>
-        <span class="variant__swatch" style="--variant-color:#d8d2c0"></span>
-        <span class="variant__name">Соль</span>
-        <span class="variant__desc">Холодный воздух после прилива. Минералы, белый мускус и лёгкий ветер на коже — для тех, кому хватает немногого.</span>
-        <span class="variant__price">10 800 ₽</span>
-      </button>
+  <section class="ritual" id="ritual">
+    <div class="ritual__pin">
+      <div class="ritual__left">
+        <div class="ritual__intro">
+          <p class="eyebrow">Ритуал</p>
+          <h2>Как носить ВУАЛЬ</h2>
+        </div>
+        <div class="ritual__dial">
+          <svg class="ritual__ring" viewBox="0 0 200 200">
+            <circle class="ritual__ring-track" cx="100" cy="100" r="86"></circle>
+            <circle class="ritual__ring-fill" cx="100" cy="100" r="86"></circle>
+          </svg>
+          <span class="ritual__ring-num">01</span>
+        </div>
+      </div>
+      <div class="ritual__steps">
+        <p class="ritual__step" data-step="0">На запястья и за уши — там, где кожа теплее всего и раскрывает розу быстрее.</p>
+        <p class="ritual__step" data-step="1">Не растирайте — дайте аромату осесть самому, за несколько медленных вдохов.</p>
+        <p class="ritual__step" data-step="2">Один слой достаточен: ВУАЛЬ создана, чтобы быть рядом, а не греметь издалека.</p>
+      </div>
     </div>
   </section>
 
@@ -184,17 +186,17 @@
     </div>
     <div class="about__text">
       <p class="eyebrow">О бренде</p>
-      <h2 class="reveal-up">ЭФИР начался с отказа</h2>
-      <p class="about__p reveal-up">Мы могли сделать линейку из двенадцати ароматов — вместо этого сделали один флакон и три его состояния. Не потому что идей было мало, а потому что лишний флакон на полке — это ещё один компромисс.</p>
-      <p class="about__p reveal-up">Один сосуд проще довести до предела: форма, которую можно крутить в руках не уставая, стекло, в котором жидкость выглядит честно, крышка, у которой нет декоративной функции — только вес и точность. Три варианта внутри неё — это не деление на «день» и «ночь», а три разных ответа на один и тот же вопрос: каким воздухом вы хотите быть сегодня.</p>
-      <p class="about__p reveal-up">Мы не говорим про избранность — только про внимание к деталям, которые обычно не замечают. ЭФИР не занимает много места. Он просто остаётся дольше, чем вы думаете.</p>
+      <h2 class="reveal-up">Один аромат, который не нужно объяснять</h2>
+      <p class="about__p reveal-up">Мы могли сделать линейку из дюжины ароматов — вместо этого выпустили один флакон. Не потому что идей было мало, а потому что лишний флакон на полке — это ещё один компромисс.</p>
+      <p class="about__p reveal-up">ВУАЛЬ — это роза без тяжести: мы убирали ноты, пока не остался только воздух вокруг лепестка. Стекло повторяет складки лёгкой ткани, крышка — единственный акцент из тёплого золота.</p>
+      <p class="about__p reveal-up">Мы не говорим про избранность — только про внимание к деталям, которые обычно не замечают. ВУАЛЬ не занимает много места. Она просто остаётся дольше, чем вы думаете.</p>
     </div>
   </section>
 
   <section class="cta" id="cta">
     <div class="cta__inner">
       <p class="eyebrow">Запуск</p>
-      <h2 class="reveal-up">Узнать о запуске</h2>
+      <h2 class="reveal-up">Узнать о запуске ВУАЛИ</h2>
       <p class="cta__sub reveal-up">Оставьте почту — напишем, когда флакон станет доступен к заказу, и ничего больше.</p>
       <form class="cta__form" id="ctaForm" novalidate>
         <div class="field">
@@ -213,9 +215,6 @@
 </main>
 
 <footer class="footer">
-  <div class="footer__marquee" aria-hidden="true">
-    <div class="footer__marquee-track"><span>ЭФИР</span><span>ЭФИР</span><span>ЭФИР</span><span>ЭФИР</span></div>
-  </div>
   <div class="footer__grid">
     <div>
       <p class="eyebrow">Шоурум</p>
@@ -235,7 +234,7 @@
   </div>
   <div class="footer__bottom">
     <span>© 2026 ЭФИР. Все права защищены.</span>
-    <span>3D-модель: «Perfume bottle» — Poly by Google, CC BY 4.0</span>
+    <span>3D-модель: «Perfume Bottle» — Michaela Blanchfield, Sketchfab, CC BY 4.0</span>
   </div>
 </footer>
 

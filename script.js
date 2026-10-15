@@ -89,10 +89,21 @@ function initHeader(){
   }));
 }
 
+/* ---------- Hero title: split into letters once, for the dissolve-in reveal ---------- */
+function splitHeroTitle(){
+  const el = document.querySelector('.hero__title');
+  if (!el) return;
+  const text = el.textContent;
+  el.innerHTML = text.split('').map(ch => `<span class="letter">${ch === ' ' ? '&nbsp;' : ch}</span>`).join('');
+}
+
 /* ---------- Hero entrance ---------- */
 function heroEntrance(){
   gsap.set('.hero__eyebrow span', { yPercent: 120 });
   gsap.to('.hero__eyebrow span', { yPercent: 0, duration: 0.9, ease: 'power4.out', delay: 0.1 });
+  gsap.to('.hero__title .letter', {
+    filter: 'blur(0px)', opacity: 1, duration: 1.1, ease: 'power2.out', stagger: 0.07, delay: 0.25
+  });
 }
 
 /* ---------- Scroll reveals ---------- */
@@ -149,16 +160,27 @@ function initLab(){
   });
 }
 
-/* ---------- Variants ---------- */
-function initVariants(){
-  const variants = document.querySelectorAll('.variant');
-  variants.forEach(btn => {
-    btn.addEventListener('click', () => {
-      variants.forEach(v => v.classList.remove('is-active'));
-      btn.classList.add('is-active');
-      const name = btn.dataset.variant;
-      if (window.bottleScene) window.bottleScene.setVariant(name);
-    });
+/* ---------- Ritual: pinned ring-dial scrubbed by scroll ---------- */
+function initRitual(){
+  const section = document.querySelector('.ritual');
+  const ringFill = document.querySelector('.ritual__ring-fill');
+  const ringNum = document.querySelector('.ritual__ring-num');
+  const steps = document.querySelectorAll('.ritual__step');
+  if (!section || !ringFill || !steps.length) return;
+  const circumference = 2 * Math.PI * 86;
+
+  function setStep(i){
+    steps.forEach(s => s.classList.toggle('is-active', s.dataset.step === String(i)));
+    ringNum.textContent = String(i + 1).padStart(2, '0');
+  }
+  setStep(0);
+
+  ScrollTrigger.create({
+    trigger: section, start: 'top top', end: 'bottom bottom', scrub: true,
+    onUpdate(self){
+      ringFill.style.strokeDashoffset = String(circumference * (1 - self.progress));
+      setStep(Math.min(steps.length - 1, Math.floor(self.progress * steps.length)));
+    }
   });
 }
 
@@ -195,6 +217,7 @@ function initAnchors(){
 
 /* ---------- Boot ---------- */
 document.addEventListener('DOMContentLoaded', () => {
+  splitHeroTitle();
   initAnchors();
   initHeader();
   initCursor();
@@ -202,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initReveals();
   initRatings();
   initLab();
-  initVariants();
+  initRitual();
   initCtaForm();
 
   runPreloader(() => {
