@@ -198,7 +198,11 @@ window.initBottleScene = function initBottleScene(canvasEl) {
         child.material.clippingPlanes = [liquidClipPlane];
       }
       if (child.name === OUTER_GLASS_MESH_NAME && child.material) {
-        child.material.opacity = 0.14;
+        // tinting the glass itself (not just bumping opacity) means the
+        // solid base reads as rose-tinted glass continuing the liquid's
+        // colour, instead of a neutral-grey band butting up against it.
+        child.material.color.set(0xeec2cd);
+        child.material.opacity = 0.16;
       }
     });
 
