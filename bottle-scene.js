@@ -154,13 +154,20 @@ window.initBottleScene = function initBottleScene(canvasEl) {
   let loadedRoot = null;
 
   // the liquid mesh (identified below by its known node name in this GLB)
-  // gets its own pivot so it can move independently of the rigid glass —
-  // staying level under tilt and sloshing a little when the bottle is spun.
+  // stays a perfectly rigid part of the glass — rotating it on its own
+  // tore its silhouette away from the glass walls at any real tilt angle.
+  // Instead its surface is kept level by a world-space clipping plane: the
+  // mesh's sides still match the (rotating) glass exactly, only the top
+  // face is cut flat at a fixed world height, the way a real liquid's
+  // surface would look as the bottle tilts around it.
   const LIQUID_MESH_NAME = 'Mesh4__Color_A05_1_0';
-  let liquidGroup = null;
-  let liquidTiltX = 0;
-  let liquidWobbleZ = 0;
-  let liquidWobbleVel = 0;
+  // the outer glass shell — it doesn't reach the very base of the bottle
+  // (the liquid/inner-glass meshes stop short, leaving a solid decorative
+  // glass foot), so its own near-invisible 5% opacity made that foot read
+  // as an empty gap rather than thick glass.
+  const OUTER_GLASS_MESH_NAME = 'Mesh5_Color_A01_0';
+  renderer.localClippingEnabled = true;
+  const liquidClipPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), 0);
 
   const loader = new GLTFLoader();
   loader.load(MODEL_URL, (gltf) => {
@@ -187,6 +194,11 @@ window.initBottleScene = function initBottleScene(canvasEl) {
         // opacity — barely a tint. Give it real colour density so it reads
         // as an actual liquid instead of washing out at glancing angles.
         child.material.opacity = 0.55;
+        child.material.side = THREE.DoubleSide; // so the cut face isn't a hole
+        child.material.clippingPlanes = [liquidClipPlane];
+      }
+      if (child.name === OUTER_GLASS_MESH_NAME && child.material) {
+        child.material.opacity = 0.14;
       }
     });
 
@@ -195,12 +207,11 @@ window.initBottleScene = function initBottleScene(canvasEl) {
 
     const liquid = model.getObjectByName(LIQUID_MESH_NAME);
     if (liquid) {
-      liquidGroup = new THREE.Group();
-      liquidGroup.position.copy(model.position);
-      liquidGroup.quaternion.copy(model.quaternion);
-      liquidGroup.scale.copy(model.scale);
-      bottleGroup.add(liquidGroup);
-      liquidGroup.attach(liquid); // re-parents while preserving world transform
+      // fix the clip height at the liquid's own resting fill line, in world
+      // space, once — a liquid's level never needs to move on its own, only
+      // the (rotating) glass around it does.
+      const liquidBox = new THREE.Box3().setFromObject(liquid);
+      liquidClipPlane.constant = liquidBox.max.y;
     }
   }, undefined, (err) => {
     console.warn('ЭФИР: не удалось загрузить 3D-модель флакона', err);
@@ -299,23 +310,6 @@ window.initBottleScene = function initBottleScene(canvasEl) {
       pivotGroup.rotation.y += AUTO_ROTATE_SPEED * delta;
     }
 
-    if (liquidGroup) {
-      if (reducedMotion) {
-        liquidGroup.rotation.set(0, 0, 0);
-      } else {
-        // the surface lags toward staying level with gravity as the bottle tilts
-        const targetTilt = -pivotGroup.rotation.x * 0.8;
-        liquidTiltX += (targetTilt - liquidTiltX) * 0.08;
-
-        // a small damped spring, driven by spin speed, for a sloshing wobble
-        liquidWobbleVel += -liquidWobbleZ * 0.09 + velY * 0.7;
-        liquidWobbleVel *= 0.88;
-        liquidWobbleZ = clamp(liquidWobbleZ + liquidWobbleVel, -0.22, 0.22);
-
-        liquidGroup.rotation.set(liquidTiltX, 0, liquidWobbleZ);
-      }
-    }
-
     camera.position.lerp(scrollTarget.pos, 0.06);
     currentLook.lerp(scrollTarget.look, 0.06);
     camera.fov = lerp(camera.fov, scrollTarget.fov, 0.06);
@@ -345,16 +339,6 @@ window.initBottleScene = function initBottleScene(canvasEl) {
 
     if (loadedRoot) {
       loadedRoot.traverse((child) => {
-        if (child.isMesh) {
-          child.geometry.dispose();
-          if (child.material) child.material.dispose();
-        }
-      });
-    }
-    if (liquidGroup) {
-      // the liquid mesh was re-parented out of loadedRoot via attach(), so
-      // the traversal above never reaches it — dispose it separately.
-      liquidGroup.traverse((child) => {
         if (child.isMesh) {
           child.geometry.dispose();
           if (child.material) child.material.dispose();
