@@ -153,6 +153,15 @@ window.initBottleScene = function initBottleScene(canvasEl) {
 
   let loadedRoot = null;
 
+  // the liquid mesh (identified below by its known node name in this GLB)
+  // gets its own pivot so it can move independently of the rigid glass —
+  // staying level under tilt and sloshing a little when the bottle is spun.
+  const LIQUID_MESH_NAME = 'Mesh4__Color_A05_1_0';
+  let liquidGroup = null;
+  let liquidTiltX = 0;
+  let liquidWobbleZ = 0;
+  let liquidWobbleVel = 0;
+
   const loader = new GLTFLoader();
   loader.load(MODEL_URL, (gltf) => {
     const model = gltf.scene;
@@ -173,10 +182,26 @@ window.initBottleScene = function initBottleScene(canvasEl) {
       if (!child.isMesh) return;
       child.castShadow = renderer.shadowMap.enabled;
       child.receiveShadow = false;
+      if (child.name === LIQUID_MESH_NAME && child.material) {
+        // the spec-gloss → metal-rough conversion left the liquid at ~7%
+        // opacity — barely a tint. Give it real colour density so it reads
+        // as an actual liquid instead of washing out at glancing angles.
+        child.material.opacity = 0.55;
+      }
     });
 
     bottleGroup.add(model);
     loadedRoot = model;
+
+    const liquid = model.getObjectByName(LIQUID_MESH_NAME);
+    if (liquid) {
+      liquidGroup = new THREE.Group();
+      liquidGroup.position.copy(model.position);
+      liquidGroup.quaternion.copy(model.quaternion);
+      liquidGroup.scale.copy(model.scale);
+      bottleGroup.add(liquidGroup);
+      liquidGroup.attach(liquid); // re-parents while preserving world transform
+    }
   }, undefined, (err) => {
     console.warn('ЭФИР: не удалось загрузить 3D-модель флакона', err);
   });
@@ -274,6 +299,23 @@ window.initBottleScene = function initBottleScene(canvasEl) {
       pivotGroup.rotation.y += AUTO_ROTATE_SPEED * delta;
     }
 
+    if (liquidGroup) {
+      if (reducedMotion) {
+        liquidGroup.rotation.set(0, 0, 0);
+      } else {
+        // the surface lags toward staying level with gravity as the bottle tilts
+        const targetTilt = -pivotGroup.rotation.x * 0.8;
+        liquidTiltX += (targetTilt - liquidTiltX) * 0.08;
+
+        // a small damped spring, driven by spin speed, for a sloshing wobble
+        liquidWobbleVel += -liquidWobbleZ * 0.09 + velY * 0.7;
+        liquidWobbleVel *= 0.88;
+        liquidWobbleZ = clamp(liquidWobbleZ + liquidWobbleVel, -0.22, 0.22);
+
+        liquidGroup.rotation.set(liquidTiltX, 0, liquidWobbleZ);
+      }
+    }
+
     camera.position.lerp(scrollTarget.pos, 0.06);
     currentLook.lerp(scrollTarget.look, 0.06);
     camera.fov = lerp(camera.fov, scrollTarget.fov, 0.06);
@@ -303,6 +345,16 @@ window.initBottleScene = function initBottleScene(canvasEl) {
 
     if (loadedRoot) {
       loadedRoot.traverse((child) => {
+        if (child.isMesh) {
+          child.geometry.dispose();
+          if (child.material) child.material.dispose();
+        }
+      });
+    }
+    if (liquidGroup) {
+      // the liquid mesh was re-parented out of loadedRoot via attach(), so
+      // the traversal above never reaches it — dispose it separately.
+      liquidGroup.traverse((child) => {
         if (child.isMesh) {
           child.geometry.dispose();
           if (child.material) child.material.dispose();
